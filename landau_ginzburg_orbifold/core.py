@@ -60,3 +60,11 @@ class LandauGinzburgOrbifold:
         Return central charge of Landau-Ginzburg orbifold
         """
         return symbolic_sum([ZZ(1) - ZZ(2)*q for q in self.charges()])
+
+    @cached_method
+    def __fix__(self, g):
+        r"""
+        Return fixed subspace w.r.t g
+        """
+        matrix = g.matrix()
+        return (matrix - matrix.parent().one()).kernel()
