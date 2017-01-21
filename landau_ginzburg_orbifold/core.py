@@ -8,7 +8,10 @@ AUTHORS:
 from sage.arith.misc import lcm
 from sage.matrix.special import diagonal_matrix
 from sage.misc.cachefunc import cached_method
+from sage.misc.functional import symbolic_sum
+from sage.rings.integer_ring import ZZ
 from sage.rings.number_field.number_field import CyclotomicField
+from sage.rings.rational_field import QQ
 from sage.rings.universal_cyclotomic_field import E
 
 class LandauGinzburgOrbifold:
@@ -50,3 +53,10 @@ class LandauGinzburgOrbifold:
         """
         d = self.degree()
         return diagonal_matrix(CyclotomicField(), [E(d)**w for w in self.weights()])
+
+    @cached_method
+    def central_charge(self):
+        r"""
+        Return central charge of Landau-Ginzburg orbifold
+        """
+        return symbolic_sum([ZZ(1) - ZZ(2)*q for q in self.charges()])
