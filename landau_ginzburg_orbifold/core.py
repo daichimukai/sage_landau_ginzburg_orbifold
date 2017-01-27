@@ -68,3 +68,15 @@ class LandauGinzburgOrbifold:
         """
         matrix = g.matrix()
         return (matrix - matrix.parent().one()).kernel()
+
+    @cached_method
+    def __block_type__(self):
+        return [self.weights().count(w) for w in self.__block_weights__()]
+
+    @cached_method
+    def __block_weights__(self):
+        weights_no_dup = []
+        for w in self.weights():
+            if not weights_no_dup.__contains__(w):
+                weights_no_dup.append(w)
+        return weights_no_dup
