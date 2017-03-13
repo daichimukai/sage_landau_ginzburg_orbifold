@@ -104,7 +104,15 @@ class LandauGinzburgOrbifold:
     @cached_method
     def poincare_series(self):
         conj = self.group().conjugacy_class_representatives()
-        return symbolic_sum([self.poincare_series_sector(g) for g in conj])
+        ret = symbolic_sum([self.poincare_series_sector(g) for g in conj])
+
+        # Assert some properties (Hodge symmetry and Serre duality)
+        u, v = ret.parent().gens()
+        assert ret == ret(u=v, v=u)
+        if (self.degree()*self.central_charge()).is_integer():
+            assert ret == (u*v)**(self.degree()*self.central_charge())*ret(u=u**(-1), v=v**(-1))
+
+        return ret
 
     def poincare_series_sector(self, g):
         fix = self.__fix__(g)
